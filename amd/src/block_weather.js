@@ -8,6 +8,9 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                 ]).done(function(s) {
                     weather.weatherInfo(s, enabledOption, openWeatherKey);
                     $(document).on('click', '.block-weather-refresh', function() {
+                        var tag = $('#weather-container');
+                        var html = '';
+                        tag.html(html);
                         weather.weatherInfo(s, enabledOption, openWeatherKey);
                     });
                 });
@@ -25,7 +28,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                     let latitude = position.coords.latitude;
                     let longitude = position.coords.longitude;
                     if (enabledOption === 1 && openWeatherKey.length) {
-                        weather.openWeather(openWeatherKey, latitude, longitude);
+                        weather.openWeather(s, openWeatherKey, latitude, longitude);
                     } else {
                         var errorMsg = s[1];
                         weather.weatherError(errorMsg);
@@ -49,15 +52,29 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                     tag.html(html);
                 }).fail(notification.exception);
             },
-            openWeather: function(openWeatherKey, latitude, longitude) {
-                console.log(latitude);
-                console.log(longitude);
-                console.log(openWeatherKey);
-                var context = {};
-                templates.render('block_weather/weather_info', context).then(function(html, js) {
-                    var tag = $('#weather-container');
-                    tag.html(html);
-                }).fail(notification.exception);
+            openWeather: function(s, openWeatherKey, latitude, longitude) {
+                let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherKey}`;
+                fetch(api)
+                    .then(function(response){
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        if (data.cod === 200) {
+                            var context = {
+                                weathervalue: Math.floor(data.main.temp - 273),
+                                weatherdesc: data.weather[0].description,
+                                weathericon: M.util.image_url(data.weather[0].icon, 'block_weather'),
+                                weatherlocation: data.name + ',' + data.sys.country
+                            };
+                            templates.render('block_weather/weather_info', context).then(function(html, js) {
+                                var tag = $('#weather-container');
+                                tag.html(html);
+                            }).fail(notification.exception);
+                        } else {
+                            var errorMsg = s[1];
+                            weather.weatherError(errorMsg);
+                        }
+                    });
             }
         };
         return weather;

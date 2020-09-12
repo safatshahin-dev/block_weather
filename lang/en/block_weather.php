@@ -26,3 +26,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Weather';
+$string['no_geo_location_support'] = 'Location service not supported in browser';
+$string['openweather'] = 'OpenWeather';
+$string['openweather_description'] = 'Setup for OpenWeather to allow weather information in your platform.';
+$string['enableopenweather'] = 'Enable OpenWeather';
+$string['openweatherapikey'] = 'API key';
+$string['openweatherapikey_desc'] = 'API key for OpenWeather.';
+$string['no_openweather_key'] = 'Invalid API key for OpenWeather';

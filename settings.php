@@ -26,6 +26,17 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-   // TODO: Define the plugin settings page.
-   // https://docs.moodle.org/dev/Admin_settings
+    $settings->add(new admin_setting_heading('openweather', get_string('openweather', 'block_weather'),
+        format_text(get_string('openweather_description', 'block_weather'), FORMAT_MARKDOWN)));
+
+    $name = 'block_weather/enableopenweather';
+    $title = get_string('enableopenweather', 'block_weather');
+    $setting = new admin_setting_configcheckbox($name, $title, '', 0);
+    $settings->add($setting);
+
+    $name = 'block_weather/openweatherapikey';
+    $title = get_string('openweatherapikey', 'block_weather');
+    $description = get_string('openweatherapikey_desc', 'block_weather');
+    $setting = new admin_setting_configtext($name, $title, $description, '');
+    $settings->add($setting);
 }

@@ -49,9 +49,11 @@ class block_weather extends block_base {
         if ($this->content !== null) {
             return $this->content;
         }
-
+        $renderer = $this->page->get_renderer('block_weather');
         $this->content = new stdClass();
-        $this->content->text = 'Weather block';
+        $this->content->text = '';
+        $this->content->text .= $renderer->render_weather();
+        $this->content->text .= $renderer->render_weather_info();
         return $this->content;
     }
 

@@ -1,10 +1,16 @@
 <?php
 
+/**
+ * Block weather renderer.
+ *
+ * @package     block_weather
+ * @copyright   2020 A K M Safat Shahin <safatshahin@gmail.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace block_weather\output;
 
 defined('MOODLE_INTERNAL') || die;
-
-use context_system;
 
 class renderer extends \plugin_renderer_base {
     /**
@@ -27,11 +33,13 @@ class renderer extends \plugin_renderer_base {
         global $PAGE;
         $PAGE->requires->css('/blocks/weather/assets/css/block_weather.css');
         $config = get_config('block_weather');
-        if ($config->enableopenweather) {
+        $openWeatherKey = '';
+        $enabledOption = 0;
+        if ((int)$config->selectedweatherapi == 1) {
             $enabledOption = 1;
             $openWeatherKey = $config->openweatherapikey;
-
         }
+
         $PAGE->requires->js_call_amd('block_weather/block_weather', 'init', array($enabledOption, $openWeatherKey));
     }
 }

@@ -1,18 +1,4 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Plugin administration pages are defined here.
@@ -26,13 +12,18 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
+    $none = get_string('noweatherapi', 'block_weather');
+    $openWeather = get_string('openweather', 'block_weather');
+    $weatherDropdown = array($none, $openWeather);
+
+    $name = 'block_weather/selectedweatherapi';
+    $title = get_string('selectedweatherapi', 'block_weather');
+    $description = get_string('selectedweatherapi_desc', 'block_weather');
+    $setting = new admin_setting_configselect($name, $title, '', 0, $weatherDropdown);
+    $settings->add($setting);
+
     $settings->add(new admin_setting_heading('openweather', get_string('openweather', 'block_weather'),
         format_text(get_string('openweather_description', 'block_weather'), FORMAT_MARKDOWN)));
-
-    $name = 'block_weather/enableopenweather';
-    $title = get_string('enableopenweather', 'block_weather');
-    $setting = new admin_setting_configcheckbox($name, $title, '', 0);
-    $settings->add($setting);
 
     $name = 'block_weather/openweatherapikey';
     $title = get_string('openweatherapikey', 'block_weather');

@@ -1,23 +1,39 @@
+/**
+ * Contains the logic for a weather block.
+ *
+ * @package     block_weather
+ * @copyright   2020 A K M Safat Shahin <safatshahin@gmail.com>
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', 'core/templates'],
     function($, AJAX, str, mdlcfg, notification, templates) {
         var weather = {
             init: function(enabledOption, openWeatherKey) {
                 str.get_strings([
                     {'key': 'no_geo_location_support', component: 'block_weather'},
-                    {'key': 'no_openweather_key', component: 'block_weather'}
+                    {'key': 'no_openweather_key', component: 'block_weather'},
+                    {'key': 'no_weather_provider', component: 'block_weather'}
                 ]).done(function(s) {
-                    weather.weatherInfo(s, enabledOption, openWeatherKey);
+                    if (enabledOption === 0) {
+                        weather.weatherError(s[2]);
+                    } else {
+                        weather.weatherInfo(s, enabledOption, openWeatherKey);
+                    }
+                    // REFRESH THE WEATHER
                     $(document).on('click', '.block-weather-refresh', function() {
                         var tag = $('#weather-container');
                         var html = '';
                         tag.html(html);
                         weather.weatherInfo(s, enabledOption, openWeatherKey);
                     });
+                    // CHANGE CELSIUS TO FAHRENHEIT ON CLICK OR VICE THE OTHER WAY
                     $(document).on('click', '.block-weather-temperature-value', function() {
                         var tempValue = $('.block-weather-temperature-value').attr('data-value');
                         if (tempValue !== '-') {
                             var tempAction = $('.block-weather-temperature-value').attr('data-action');
                             if (tempAction === 'celsius') {
+                                // CHANGE TO FAHRENHEIT
                                 var farhValue = Math.floor((parseInt(tempValue) * 9 / 5) + 32);
                                 var temp = $('.block-weather-temperature-value');
                                 var tempData = '<p>' + farhValue + '°<span>F</span></p>';
@@ -25,6 +41,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                                 $('.block-weather-temperature-value').attr('data-action', 'fahrenheit');
                                 temp.html(tempData);
                             } else {
+                                // CHANGE TO CELSIUS
                                 var celcValue = Math.floor((parseInt(tempValue) - 32) * 5 / 9);
                                 var temp = $('.block-weather-temperature-value');
                                 var tempData = '<p>' + celcValue + '°<span>C</span></p>';
@@ -77,7 +94,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
             openWeather: function(s, openWeatherKey, latitude, longitude) {
                 let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherKey}`;
                 fetch(api)
-                    .then(function(response){
+                    .then(function(response) {
                         return response.json();
                     })
                     .then(function(data) {

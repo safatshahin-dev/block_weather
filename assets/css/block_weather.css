@@ -3,7 +3,10 @@
   background-color: #FFF;
   display: block;
   margin: 0 auto;
-  border-radius: 10px;
+}
+
+#weather-container {
+  min-height: 250px;
 }
 
 .block-weather-notification {
@@ -12,7 +15,7 @@
 
 .block-weather-notification p {
   color: #721c24;
-  font-size: 1.2em;
+  font-size: 1em;
   margin: 0;
   text-align: center;
   padding: 10px 0;
@@ -61,6 +64,10 @@
   color: #293251;
   text-align: center;
   font-size: 0.8em;
+}
+
+.block-weather-refresh-cintainer i {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=block_weather.css.map */

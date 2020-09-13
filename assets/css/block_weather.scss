@@ -3,17 +3,19 @@
   background-color: #FFF;
   display: block;
   margin: 0 auto;
-  border-radius: 10px;
+}
+
+#weather-container {
+  min-height: 250px;
 }
 
 .block-weather-notification{
   background-color: #f8d7da;
-  //display: none;
 }
 
 .block-weather-notification p{
   color: #721c24;
-  font-size: 1.2em;
+  font-size: 1em;
   margin: 0;
   text-align: center;
   padding: 10px 0;
@@ -43,17 +45,9 @@
   cursor: pointer;
 }
 
-.block-weather-temperature-value p:hover{
-
-}
-
 .block-weather-temperature-value span{
   color: #293251;
   font-size: 0.5em;
-}
-
-.block-weather-temperature-description{
-
 }
 
 .block-weather-temperature-description p{
@@ -64,14 +58,14 @@
   font-size: 1.2em;
 }
 
-.block-weather-location{
-
-}
-
 .block-weather-location p{
   margin: 0;
   padding: 0;
   color: #293251;
   text-align: center;
   font-size: 0.8em;
+}
+
+.block-weather-refresh-cintainer i{
+  cursor: pointer;
 }

@@ -43,7 +43,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
             },
             weatherError: function(error) {
                 var context = {
-                    weathererror: error,
+                    weathererror: `<p> ${error} </p>`,
                     weathericon: M.util.image_url('unknown', 'block_weather'),
                     weathervalue: '-'
                 };

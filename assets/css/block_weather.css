@@ -7,7 +7,7 @@
 }
 
 #weather-container {
-  min-height: 250px;
+  min-height: 240px;
 }
 
 .block-weather-notification {
@@ -24,7 +24,7 @@
 
 .weather-icon {
   width: 300px;
-  height: 128px;
+  height: 110px;
 }
 
 .weather-icon img {

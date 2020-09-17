@@ -1,73 +1,73 @@
 /* CSS properties for Weather Block. */
 
 #block-weather-container {
-  width: 300px;
-  background-color: #FFF;
-  display: block;
-  margin: 0 auto;
+    width: 300px;
+    background-color: #FFF;
+    display: block;
+    margin: 0 auto;
 }
 
 #weather-container {
-  min-height: 250px;
+    min-height: 240px;
 }
 
 .block-weather-notification {
-  background-color: #f8d7da;
+    background-color: #f8d7da;
 }
 
 .block-weather-notification p {
-  color: #721c24;
-  font-size: 1em;
-  margin: 0;
-  text-align: center;
-  padding: 10px 0;
+    color: #721c24;
+    font-size: 1em;
+    margin: 0;
+    text-align: center;
+    padding: 10px 0;
 }
 
 .weather-icon {
-  width: 300px;
-  height: 128px;
+    width: 300px;
+    height: 110px;
 }
 
 .weather-icon img {
-  display: block;
-  margin: 0 auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .block-weather-temperature-value {
-  width: 300px;
-  height: 60px;
+    width: 300px;
+    height: 60px;
 }
 
 .block-weather-temperature-value p {
-  padding: 0;
-  margin: 0;
-  color: #293251;
-  font-size: 4em;
-  text-align: center;
-  cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: #293251;
+    font-size: 4em;
+    text-align: center;
+    cursor: pointer;
 }
 
 .block-weather-temperature-value span {
-  color: #293251;
-  font-size: 0.5em;
+    color: #293251;
+    font-size: 0.5em;
 }
 
 .block-weather-temperature-description p {
-  padding: 8px;
-  margin: 0;
-  color: #293251;
-  text-align: center;
-  font-size: 1.2em;
+    padding: 8px;
+    margin: 0;
+    color: #293251;
+    text-align: center;
+    font-size: 1.2em;
 }
 
 .block-weather-location p {
-  margin: 0;
-  padding: 0;
-  color: #293251;
-  text-align: center;
-  font-size: 0.8em;
+    margin: 0;
+    padding: 0;
+    color: #293251;
+    text-align: center;
+    font-size: 0.8em;
 }
 
 .block-weather-refresh-cintainer i {
-  cursor: pointer;
+    cursor: pointer;
 }

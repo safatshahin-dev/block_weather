@@ -23,4 +23,8 @@ $string['openweather'] = 'OpenWeather';
 $string['openweather_description'] = 'Setup for OpenWeather to allow weather information in your platform.';
 $string['openweatherapikey'] = 'API key';
 $string['openweatherapikey_desc'] = 'API key for OpenWeather.';
+$string['accuweather'] = 'AccuWeather';
+$string['accuweather_description'] = 'Setup for AccuWeather to allow weather information in your platform.';
+$string['accuweatherapikey'] = 'API key';
+$string['accuweatherapikey_desc'] = 'API key for AccuWeather.';
 

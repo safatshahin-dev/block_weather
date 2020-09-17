@@ -14,7 +14,8 @@ defined('MOODLE_INTERNAL') || die();
 if ($ADMIN->fulltree) {
     $none = get_string('noweatherapi', 'block_weather');
     $openWeather = get_string('openweather', 'block_weather');
-    $weatherDropdown = array($none, $openWeather);
+    $accuWeather = get_string('accuweather', 'block_weather');
+    $weatherDropdown = array($none, $openWeather, $accuWeather);
 
     $name = 'block_weather/selectedweatherapi';
     $title = get_string('selectedweatherapi', 'block_weather');
@@ -28,6 +29,15 @@ if ($ADMIN->fulltree) {
     $name = 'block_weather/openweatherapikey';
     $title = get_string('openweatherapikey', 'block_weather');
     $description = get_string('openweatherapikey_desc', 'block_weather');
+    $setting = new admin_setting_configtext($name, $title, $description, '');
+    $settings->add($setting);
+
+    $settings->add(new admin_setting_heading('accuweather', get_string('accuweather', 'block_weather'),
+        format_text(get_string('accuweather_description', 'block_weather'), FORMAT_MARKDOWN)));
+
+    $name = 'block_weather/accuweatherapikey';
+    $title = get_string('accuweatherapikey', 'block_weather');
+    $description = get_string('accuweatherapikey_desc', 'block_weather');
     $setting = new admin_setting_configtext($name, $title, $description, '');
     $settings->add($setting);
 }

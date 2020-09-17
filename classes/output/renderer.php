@@ -33,13 +33,16 @@ class renderer extends \plugin_renderer_base {
         global $PAGE;
         $PAGE->requires->css('/blocks/weather/assets/css/block_weather.css');
         $config = get_config('block_weather');
-        $openWeatherKey = '';
+        $weatherKey = '';
         $enabledOption = 0;
         if ((int)$config->selectedweatherapi == 1) {
             $enabledOption = 1;
-            $openWeatherKey = $config->openweatherapikey;
+            $weatherKey = $config->openweatherapikey;
+        } else if ((int)$config->selectedweatherapi == 2) {
+            $enabledOption = 2;
+            $weatherKey = $config->accuweatherapikey;
         }
 
-        $PAGE->requires->js_call_amd('block_weather/block_weather', 'init', array($enabledOption, $openWeatherKey));
+        $PAGE->requires->js_call_amd('block_weather/block_weather', 'init', array($enabledOption, $weatherKey));
     }
 }

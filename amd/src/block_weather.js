@@ -9,7 +9,7 @@
 define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', 'core/templates'],
     function($, AJAX, str, mdlcfg, notification, templates) {
         var weather = {
-            init: function(enabledOption, openWeatherKey) {
+            init: function(enabledOption, weatherKey) {
                 str.get_strings([
                     {'key': 'no_geo_location_support', component: 'block_weather'},
                     {'key': 'no_openweather_key', component: 'block_weather'},
@@ -18,14 +18,14 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                     if (enabledOption === 0) {
                         weather.weatherError(s[2]);
                     } else {
-                        weather.weatherInfo(s, enabledOption, openWeatherKey);
+                        weather.weatherInfo(s, enabledOption, weatherKey);
                     }
                     // REFRESH THE WEATHER
                     $(document).on('click', '.block-weather-refresh', function() {
                         var tag = $('#weather-container');
                         var html = '';
                         tag.html(html);
-                        weather.weatherInfo(s, enabledOption, openWeatherKey);
+                        weather.weatherInfo(s, enabledOption, weatherKey);
                     });
                     // CHANGE CELSIUS TO FAHRENHEIT ON CLICK OR VICE THE OTHER WAY
                     $(document).on('click', '.block-weather-temperature-value', function() {
@@ -53,7 +53,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                     });
                 });
             },
-            weatherInfo: function(s, enabledOption, openWeatherKey) {
+            weatherInfo: function(s, enabledOption, weatherKey) {
                 // CHECK IF BROWSER SUPPORTS GEOLOCATION
                 if ('geolocation' in navigator) {
                     navigator.geolocation.getCurrentPosition(setPosition, showError);
@@ -65,8 +65,10 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                 function setPosition(position) {
                     let latitude = position.coords.latitude;
                     let longitude = position.coords.longitude;
-                    if (enabledOption === 1 && openWeatherKey.length) {
-                        weather.openWeather(s, openWeatherKey, latitude, longitude);
+                    if (enabledOption === 1 && weatherKey.length) {
+                        weather.openWeather(s, weatherKey, latitude, longitude);
+                    } else if (enabledOption === 2 && weatherKey.length) {
+                        weather.accuWeather(s, weatherKey, latitude, longitude);
                     } else {
                         var errorMsg = s[1];
                         weather.weatherError(errorMsg);
@@ -91,8 +93,8 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                     tag.html(html);
                 }).fail(notification.exception);
             },
-            openWeather: function(s, openWeatherKey, latitude, longitude) {
-                let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherKey}`;
+            openWeather: function(s, weatherKey, latitude, longitude) {
+                let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${weatherKey}`;
                 fetch(api)
                     .then(function(response) {
                         return response.json();
@@ -104,7 +106,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                                 weatherdesc: data.weather[0].description,
                                 weatherattr: 'celsius',
                                 weathericon: M.util.image_url(data.weather[0].icon, 'block_weather'),
-                                weatherlocation: data.name + ',' + data.sys.country
+                                weatherlocation: data.name + ', ' + data.sys.country
                             };
                             templates.render('block_weather/weather_info', context).then(function(html, js) {
                                 var tag = $('#weather-container');
@@ -115,6 +117,48 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                             weather.weatherError(errorMsg);
                         }
                     });
+            },
+            accuWeather : function(s, weatherKey, latitude, longitude) {
+                let locationKey = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${weatherKey}&q=${latitude}%2C${longitude}&language=en-us&details=false&toplevel=false`;
+                console.log(locationKey);
+                fetch(locationKey)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        if (data.Key.length) {
+                            console.log(data.Key.length);
+                            let api = `https://dataservice.accuweather.com/currentconditions/v1/${data.Key}?apikey=${weatherKey}&language=en-us&details=false`;
+                            console.log(api);
+                            fetch(api)
+                                .then(function(response) {
+                                    return response.json();
+                                })
+                                .then(function(weatherData) {
+                                    if (weatherData[0].WeatherText.length) {
+                                        var context = {
+                                            weathervalue: weatherData[0].Temperature.Metric.Value,
+                                            weatherdesc: weatherData[0].WeatherText,
+                                            weatherattr: 'celsius',
+                                            weathericon: M.util.image_url(weatherData[0].WeatherIcon, 'block_weather'),
+                                            weatherlocation: data.EnglishName + ', ' + data.AdministrativeArea.EnglishName
+                                        };
+                                        console.log(context);
+                                        templates.render('block_weather/weather_info', context).then(function(html, js) {
+                                            var tag = $('#weather-container');
+                                            tag.html(html);
+                                        }).fail(notification.exception);
+                                    } else {
+                                        var errorMsg = s[1];
+                                        weather.weatherError(errorMsg);
+                                    }
+                                });
+                        } else {
+                            var errorMsg = s[1];
+                            weather.weatherError(errorMsg);
+                        }
+                    });
+
             }
         };
         return weather;

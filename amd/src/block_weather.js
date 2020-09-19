@@ -48,10 +48,14 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                     }
                     // REFRESH THE WEATHER
                     $(document).on('click', '.block-weather-refresh', function() {
-                        var tag = $('#weather-container');
-                        var html = '';
-                        tag.html(html);
-                        weather.weatherInfo(s, enabledOption, weatherKey);
+                        if (enabledOption === 0) {
+                            weather.weatherError(s[2]);
+                        } else {
+                            var tag = $('#weather-container');
+                            var html = '';
+                            tag.html(html);
+                            weather.weatherInfo(s, enabledOption, weatherKey);
+                        }
                     });
                     // CHANGE CELSIUS TO FAHRENHEIT ON CLICK OR VICE THE OTHER WAY
                     $(document).on('click', '.block-weather-temperature-value', function() {
@@ -142,7 +146,10 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                             var errorMsg = s[1];
                             weather.weatherError(errorMsg);
                         }
-                    });
+                    }).catch(function(error) {
+                    var errorMsg = s[1];
+                    weather.weatherError(errorMsg);
+                });
             },
             accuWeather: function(s, weatherKey, latitude, longitude) {
                 let locationKey = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${weatherKey}&q=${latitude}%2C${longitude}&language=en-us&details=false&toplevel=false`;
@@ -151,7 +158,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                         return response.json();
                     })
                     .then(function(data) {
-                        if (data.Key.length) {
+                        if (data.Key) {
                             let api = `https://dataservice.accuweather.com/currentconditions/v1/${data.Key}?apikey=${weatherKey}&language=en-us&details=false`;
                             fetch(api)
                                 .then(function(response) {
@@ -179,7 +186,10 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                             var errorMsg = s[1];
                             weather.weatherError(errorMsg);
                         }
-                    });
+                    }).catch(function(error) {
+                    var errorMsg = s[1];
+                    weather.weatherError(errorMsg);
+                });
 
             },
             climacellWeather: function(s, weatherKey, latitude, longitude, timestamp) {
@@ -226,7 +236,10 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                                     }).fail(notification.exception);
                                 });
                         }
-                    });
+                    }).catch(function(error) {
+                    var errorMsg = s[1];
+                    weather.weatherError(errorMsg);
+                });
             }
         };
         return weather;

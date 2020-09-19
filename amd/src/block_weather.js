@@ -13,7 +13,33 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                 str.get_strings([
                     {'key': 'no_geo_location_support', component: 'block_weather'},
                     {'key': 'no_openweather_key', component: 'block_weather'},
-                    {'key': 'no_weather_provider', component: 'block_weather'}
+                    {'key': 'no_weather_provider', component: 'block_weather'},
+                    {'key': 'clear_day', component: 'block_weather'},
+                    {'key': 'clear_night', component: 'block_weather'},
+                    {'key': 'cloudy', component: 'block_weather'},
+                    {'key': 'drizzle', component: 'block_weather'},
+                    {'key': 'flurries', component: 'block_weather'},
+                    {'key': 'fog_light', component: 'block_weather'},
+                    {'key': 'fog', component: 'block_weather'},
+                    {'key': 'freezing_drizzle', component: 'block_weather'},
+                    {'key': 'freezing_rain_heavy', component: 'block_weather'},
+                    {'key': 'freezing_rain_light', component: 'block_weather'},
+                    {'key': 'freezing_rain', component: 'block_weather'},
+                    {'key': 'ice_pellets_heavy', component: 'block_weather'},
+                    {'key': 'ice_pellets_light', component: 'block_weather'},
+                    {'key': 'ice_pellets', component: 'block_weather'},
+                    {'key': 'mostly_clear_day', component: 'block_weather'},
+                    {'key': 'mostly_clear_night', component: 'block_weather'},
+                    {'key': 'mostly_cloudy', component: 'block_weather'},
+                    {'key': 'partly_cloudy_day', component: 'block_weather'},
+                    {'key': 'partly_cloudy_night', component: 'block_weather'},
+                    {'key': 'rain_heavy', component: 'block_weather'},
+                    {'key': 'rain_light', component: 'block_weather'},
+                    {'key': 'rain', component: 'block_weather'},
+                    {'key': 'snow_heavy', component: 'block_weather'},
+                    {'key': 'snow_light', component: 'block_weather'},
+                    {'key': 'snow', component: 'block_weather'},
+                    {'key': 'tstorm', component: 'block_weather'}
                 ]).done(function(s) {
                     if (enabledOption === 0) {
                         weather.weatherError(s[2]);
@@ -118,7 +144,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                         }
                     });
             },
-            accuWeather : function(s, weatherKey, latitude, longitude) {
+            accuWeather: function(s, weatherKey, latitude, longitude) {
                 let locationKey = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${weatherKey}&q=${latitude}%2C${longitude}&language=en-us&details=false&toplevel=false`;
                 fetch(locationKey)
                     .then(function(response) {
@@ -134,7 +160,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                                 .then(function(weatherData) {
                                     if (weatherData[0].WeatherText.length) {
                                         var context = {
-                                            weathervalue: weatherData[0].Temperature.Metric.Value,
+                                            weathervalue: Math.floor(weatherData[0].Temperature.Metric.Value),
                                             weatherdesc: weatherData[0].WeatherText,
                                             weatherattr: 'celsius',
                                             weathericon: M.util.image_url(weatherData[0].WeatherIcon, 'block_weather'),
@@ -171,7 +197,6 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                             if (data.weather_code.value === 'clear') {
                                 var today = new Date(timestamp);
                                 var hour = today.getHours();
-                                console.log(hour);
                                 if (hour >= 18 || hour <= 6) {
                                     weatherCode = data.weather_code.value + '_night';
                                 } else {
@@ -190,7 +215,7 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                                     }
                                     var context = {
                                         weathervalue: Math.floor(data.temp.value),
-                                        weatherdesc: M.util.get_string(weatherCode, 'block_weather'),
+                                        weatherdesc: M.util.get_string(weatherCode, 'block_weather', 'string'),
                                         weatherattr: 'celsius',
                                         weathericon: M.util.image_url(weatherCode, 'block_weather'),
                                         weatherlocation: weatherLocation
@@ -200,7 +225,6 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                                         tag.html(html);
                                     }).fail(notification.exception);
                                 });
-
                         }
                     });
             }

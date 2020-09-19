@@ -15,7 +15,6 @@ $string['pluginname'] = 'Weather';
 $string['no_geo_location_support'] = 'Location service not supported in browser';
 $string['no_openweather_key'] = 'Invalid API key';
 $string['no_weather_provider'] = 'No weather provider selected';
-
 //settings
 $string['selectedweatherapi'] = 'Select API provider';
 $string['selectedweatherapi_desc'] = 'Choose the API provider to get the weather information for the block.';
@@ -32,10 +31,9 @@ $string['climacell'] = 'Climacell';
 $string['climacell_description'] = 'Setup for Climacell to allow weather information in your platform.';
 $string['climacellpikey'] = 'API key';
 $string['climacellpikey_desc'] = 'API key for Climacell.';
-
 //climacell
-$string['clear_day'] = 'Clear day';
-$string['clear_night'] = 'Clear night';
+$string['clear_day'] = 'Clear sky';
+$string['clear_night'] = 'Clear sky';
 $string['cloudy'] = 'Cloudy';
 $string['drizzle'] = 'Drizzle';
 $string['flurries'] = 'Flurries';

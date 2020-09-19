@@ -37,15 +37,12 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                                 var farhValue = Math.floor((parseInt(tempValue) * 9 / 5) + 32);
                                 var temp = $('.block-weather-temperature-value');
                                 var tempData = '<p>' + farhValue + '°<span>F</span></p>';
-                                $('.block-weather-temperature-value').attr('data-value', farhValue);
                                 $('.block-weather-temperature-value').attr('data-action', 'fahrenheit');
                                 temp.html(tempData);
                             } else {
                                 // CHANGE TO CELSIUS
-                                var celcValue = Math.floor((parseInt(tempValue) - 32) * 5 / 9);
                                 var temp = $('.block-weather-temperature-value');
-                                var tempData = '<p>' + celcValue + '°<span>C</span></p>';
-                                $('.block-weather-temperature-value').attr('data-value', celcValue);
+                                var tempData = '<p>' + tempValue + '°<span>C</span></p>';
                                 $('.block-weather-temperature-value').attr('data-action', 'celsius');
                                 temp.html(tempData);
                             }
@@ -65,10 +62,13 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                 function setPosition(position) {
                     let latitude = position.coords.latitude;
                     let longitude = position.coords.longitude;
+                    let timestamp = position.timestamp;
                     if (enabledOption === 1 && weatherKey.length) {
                         weather.openWeather(s, weatherKey, latitude, longitude);
                     } else if (enabledOption === 2 && weatherKey.length) {
                         weather.accuWeather(s, weatherKey, latitude, longitude);
+                    } else if (enabledOption === 3 && weatherKey.length) {
+                        weather.climacellWeather(s, weatherKey, latitude, longitude, timestamp);
                     } else {
                         var errorMsg = s[1];
                         weather.weatherError(errorMsg);
@@ -120,16 +120,13 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
             },
             accuWeather : function(s, weatherKey, latitude, longitude) {
                 let locationKey = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${weatherKey}&q=${latitude}%2C${longitude}&language=en-us&details=false&toplevel=false`;
-                console.log(locationKey);
                 fetch(locationKey)
                     .then(function(response) {
                         return response.json();
                     })
                     .then(function(data) {
                         if (data.Key.length) {
-                            console.log(data.Key.length);
                             let api = `https://dataservice.accuweather.com/currentconditions/v1/${data.Key}?apikey=${weatherKey}&language=en-us&details=false`;
-                            console.log(api);
                             fetch(api)
                                 .then(function(response) {
                                     return response.json();
@@ -143,7 +140,6 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                                             weathericon: M.util.image_url(weatherData[0].WeatherIcon, 'block_weather'),
                                             weatherlocation: data.EnglishName + ', ' + data.AdministrativeArea.EnglishName
                                         };
-                                        console.log(context);
                                         templates.render('block_weather/weather_info', context).then(function(html, js) {
                                             var tag = $('#weather-container');
                                             tag.html(html);
@@ -159,6 +155,54 @@ define(['jquery', 'core/ajax', 'core/str', 'core/config', 'core/notification', '
                         }
                     });
 
+            },
+            climacellWeather: function(s, weatherKey, latitude, longitude, timestamp) {
+                let api = `https://api.climacell.co/v3/weather/realtime?lat=${latitude}&lon=${longitude}&unit_system=si&fields=temp%2Cweather_code&apikey=${weatherKey}`;
+                fetch(api)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        if (data.message) {
+                            var errorMsg = s[1];
+                            weather.weatherError(errorMsg);
+                        } else {
+                            var weatherCode = data.weather_code.value;
+                            if (data.weather_code.value === 'clear') {
+                                var today = new Date(timestamp);
+                                var hour = today.getHours();
+                                console.log(hour);
+                                if (hour >= 18 || hour <= 6) {
+                                    weatherCode = data.weather_code.value + '_night';
+                                } else {
+                                    weatherCode = data.weather_code.value + '_day';
+                                }
+                            }
+                            let location = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`;
+                            fetch(location)
+                                .then(function(response) {
+                                    return response.json();
+                                })
+                                .then(function(locationData) {
+                                    var weatherLocation = '';
+                                    if (locationData.locality) {
+                                        weatherLocation = locationData.locality + ', ' + locationData.principalSubdivision;
+                                    }
+                                    var context = {
+                                        weathervalue: Math.floor(data.temp.value),
+                                        weatherdesc: M.util.get_string(weatherCode, 'block_weather'),
+                                        weatherattr: 'celsius',
+                                        weathericon: M.util.image_url(weatherCode, 'block_weather'),
+                                        weatherlocation: weatherLocation
+                                    };
+                                    templates.render('block_weather/weather_info', context).then(function(html, js) {
+                                        var tag = $('#weather-container');
+                                        tag.html(html);
+                                    }).fail(notification.exception);
+                                });
+
+                        }
+                    });
             }
         };
         return weather;

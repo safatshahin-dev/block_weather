@@ -41,6 +41,9 @@ class renderer extends \plugin_renderer_base {
         } else if ((int)$config->selectedweatherapi == 2) {
             $enabledOption = 2;
             $weatherKey = $config->accuweatherapikey;
+        } else if ((int)$config->selectedweatherapi == 3) {
+            $enabledOption = 3;
+            $weatherKey = $config->climacellpikey;
         }
 
         $PAGE->requires->js_call_amd('block_weather/block_weather', 'init', array($enabledOption, $weatherKey));

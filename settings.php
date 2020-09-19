@@ -15,7 +15,8 @@ if ($ADMIN->fulltree) {
     $none = get_string('noweatherapi', 'block_weather');
     $openWeather = get_string('openweather', 'block_weather');
     $accuWeather = get_string('accuweather', 'block_weather');
-    $weatherDropdown = array($none, $openWeather, $accuWeather);
+    $climacell = get_string('climacell', 'block_weather');
+    $weatherDropdown = array($none, $openWeather, $accuWeather, $climacell);
 
     $name = 'block_weather/selectedweatherapi';
     $title = get_string('selectedweatherapi', 'block_weather');
@@ -38,6 +39,15 @@ if ($ADMIN->fulltree) {
     $name = 'block_weather/accuweatherapikey';
     $title = get_string('accuweatherapikey', 'block_weather');
     $description = get_string('accuweatherapikey_desc', 'block_weather');
+    $setting = new admin_setting_configtext($name, $title, $description, '');
+    $settings->add($setting);
+
+    $settings->add(new admin_setting_heading('climacell', get_string('climacell', 'block_weather'),
+        format_text(get_string('climacell_description', 'block_weather'), FORMAT_MARKDOWN)));
+
+    $name = 'block_weather/climacellpikey';
+    $title = get_string('climacellpikey', 'block_weather');
+    $description = get_string('climacellpikey_desc', 'block_weather');
     $setting = new admin_setting_configtext($name, $title, $description, '');
     $settings->add($setting);
 }

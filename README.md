@@ -57,7 +57,10 @@ Step by step instructions to get the API key:
     j. Go to Plugins > Blocks > Weather. <br>
     k. Select API provider to Climacell from the dropdown. <br>
     l. Go to the section named Climacell, paste the API key and save changes. Now just add the Weather block in the page you want and see the magic. The browser will ask you to allow location, allow that while asked.      <br>
+    
+Special tip:
+Click on the temperature to change from Celsius to Fahrenheit or vice versa.
 
 Important notes: <br>
 1. None of the geolocation and weather information of the users is saved inside the platform. <br>
-2. Users will their full control of allowing or blocking the location services for the Moodle instance. <br>
+2. Users will have their full control of allowing or blocking the location services for the Moodle instance. <br>

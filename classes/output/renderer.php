@@ -1,5 +1,18 @@
 <?php
-
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 /**
  * Block weather renderer.
  *
@@ -30,8 +43,7 @@ class renderer extends \plugin_renderer_base {
     }
 
     public function render_weather_info () {
-        global $PAGE;
-        $PAGE->requires->css('/blocks/weather/assets/css/block_weather.css');
+        $this->page->requires->css('/blocks/weather/assets/css/block_weather.css');
         $config = get_config('block_weather');
         $weatherKey = '';
         $enabledOption = 0;
@@ -46,6 +58,6 @@ class renderer extends \plugin_renderer_base {
             $weatherKey = $config->climacellpikey;
         }
 
-        $PAGE->requires->js_call_amd('block_weather/block_weather', 'init', array($enabledOption, $weatherKey));
+        $this->page->requires->js_call_amd('block_weather/block_weather', 'init', array($enabledOption, $weatherKey));
     }
 }

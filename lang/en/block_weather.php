@@ -25,6 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Weather';
+$string['weather:addinstance'] = 'Add a new weather block';
+$string['weather:myaddinstance'] = 'Add a new weather block to dashboard';
 $string['no_geo_location_support'] = 'Location service not supported in browser';
 $string['no_openweather_key'] = 'Invalid API key';
 $string['no_weather_provider'] = 'No weather provider selected';

@@ -25,6 +25,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_weather'; // Full name of the plugin (used for diagnostics).
 $plugin->release = '1.1.0';
-$plugin->version = 2020092700; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version = 2020122500; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires = 2017111300; // Requires this Moodle version.
 $plugin->maturity = MATURITY_STABLE;

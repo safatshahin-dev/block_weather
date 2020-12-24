@@ -30,6 +30,7 @@ $string['weather:myaddinstance'] = 'Add a new weather block to dashboard';
 $string['no_geo_location_support'] = 'Location service not supported in browser';
 $string['no_openweather_key'] = 'Invalid API key';
 $string['no_weather_provider'] = 'No weather provider selected';
+$string['privacy:metadata'] = 'The weather block only displays the real time weather of the user according to geolocation.';
 //settings
 $string['selectedweatherapi'] = 'Select API provider';
 $string['selectedweatherapi_desc'] = 'Choose the API provider to get the weather information for the block.';
